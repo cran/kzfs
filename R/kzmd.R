@@ -8,13 +8,13 @@
 #' 
 #' @param     ss 		Data frame with value column after time/space columns.
 #' @param     window	Vector for window size of each dimension.
-#' @param	  scale	Vector for scale of each dimension.
-#' @param     k		Iteration times of KZ filter. Defaults to 1.
-#' @param     edges	Logic. Defaults to TRUE. FLASE means clear the data that  
-#'				are located outside the time-space range of input data.
+#' @param	  scale		Vector for scale of each dimension.
+#' @param     k			Iteration times of KZ filter. Defaults to 1.
+#' @param     edges		Logic. Defaults to TRUE. FLASE means clear the data that  
+#'						are located outside the time-space range of input data.
 #' @return		Data framework with the similar structure as the input data.
 #  @details		See introduction of KZ filters in \code{kza::kz}.
-#' @concept       Kolmogorov-Zurbenko filter
+#' @concept     Kolmogorov-Zurbenko filter
 #' @keywords 	KZ-filter
 #' @export
 #' @seealso		\code{\link[kza]{kz}}

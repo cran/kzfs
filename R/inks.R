@@ -1,17 +1,17 @@
 # -------------------------------------------------------------------
-#' @title		
-#' 	   Internal Function For Spatial KZ Filter \code{kzmd} 
-#'
-#' @description	
-#'     \code{inks} is the control structure of the \code{kzmd} program.
-#' It returns data frame of signal values and their grid positions.
+#  @title		
+#  	   Internal Function For Spatial KZ Filter \code{kzmd} 
+# 
+#  @description	
+#      \code{inks} is the control structure of the \code{kzmd} program.
+#  It returns data frame of signal values and their grid positions.
 #
-#' @param	   ss	  Data frame of signal values and positions.
-#' @param 	iterD	  Vector. Window size for KZ filter.
-#' @param	iterS	  Vector. Scales of each dimension.
-#' @param 	namex	  Names for each column of input data.
-#' @export	   inks
-#' @keywords   internal
+#  @param	   ss	  Data frame of signal values and positions.
+#  @param 	iterD	  Vector. Window size for KZ filter.
+#  @param	iterS	  Vector. Scales of each dimension.
+#  @param 	namex	  Names for each column of input data.
+#  @export	   inks
+#  @keywords   internal
 # --------------------------------------------------------------------
 
 inks <- function(ss, iterD, iterS, namex) 
@@ -35,11 +35,11 @@ inks <- function(ss, iterD, iterS, namex)
 # -----------------------------------------------------------------
 #   	Prepare data frame for calculation
 #
-#' \code{inkspark} prepares the expanded data frame for KZ filtering.
-#' @rdname	inks
-#' @param	delta   Integer. Window size of current dimension.
-#' @param	sc	   	Integer. Scales of current dimension.
-#' @export	 
+#  \code{inkspark} prepares the expanded data frame for KZ filtering.
+#  @rdname	inks
+#  @param	delta   Integer. Window size of current dimension.
+#  @param	sc	   	Integer. Scales of current dimension.
+#  @export	 
 # -----------------------------------------------------------------
 
 inkspark <- function(ss, delta, sc) {
@@ -102,9 +102,9 @@ inkspark <- function(ss, delta, sc) {
 # -----------------------------------------------------------------
 #   	Smoothing data in the enlarged data frame
 #
-#' \code{deltablur} calculates the filtered value of each grid point.
-#' @rdname	inks
-#' @export	 
+#  \code{deltablur} calculates the filtered value of each grid point.
+#  @rdname	inks
+#  @export	 
 # -----------------------------------------------------------------
 
 deltablur <- function(ss, delta) {

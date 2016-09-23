@@ -5,8 +5,6 @@
 \alias{agrid}
 \alias{df2mt}
 \alias{getwave}
-\alias{markspikes}
-\alias{spikes.2d}
 \title{Internal Function For Directional KZ Periodogram \code{kzpdr}}
 \usage{
 getwave(df, angle)
@@ -16,10 +14,6 @@ a2d(a)
 df2mt(df, scale)
 
 agrid(df, scale, math = "mean")
-
-spikes.2d(x.fq, y.spm)
-
-markspikes(x.fq, y.spm, plot = TRUE, ...)
 }
 \arguments{
 \item{df}{Data frame of signal values and positions.}
@@ -32,24 +26,6 @@ markspikes(x.fq, y.spm, plot = TRUE, ...)
 for a \emph{x * y} grid, the scale is \emph{c(1/x, 1/y)}.}
 
 \item{math}{Function to aggregate the data. Defaults to "mean".}
-
-\item{x.fq}{Vector of frequency values for x axis.}
-
-\item{y.spm}{Vector of spectrum values for y axis.}
-
-\item{plot}{If need to add marks on the periodogram. Defaults to TRUE.}
-
-\item{...}{Other arguments, i.e. the "cut" threshold, etc.
-\itemize{
-\item    \code{ cut : }  
-            Set the minimum value for a marked frequency spike. Recommend to
-              use argument \code{lvl} instead of setting this value directly.
-\item    \code{ lvl : }
-            "min" or "max". Threshold strategy for marking frequency spikes.
-            Essentially it will set the "cut" threshold value as different
-              level. "min" is used for cases of weak singles dominating by 
-              some strong singles. Defaults to "max". 
-}}
 }
 \description{
 A group of internal functions used by \code{kzpdr} function.
@@ -61,9 +37,6 @@ a given line in a 2D field.
 
   \item \code{a2d} transfers 2D array to data frame. If input is data frame, 
 it will return the original data frame.
-
-  \item \code{markspikes} and \code{spikes.2d} are functions to mark the 
-spikes of the 1D periodogram and 2D periodogram, respectively.
 
   \item \code{df2mt} transfers data frame to matrix.
 }

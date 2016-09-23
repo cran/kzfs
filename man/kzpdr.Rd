@@ -3,26 +3,11 @@
 \name{kzpdr}
 \alias{kzpdr}
 \alias{kzpdr.3d}
-\alias{kzpdr.estimate}
-\alias{kzpdr.eval}
-\alias{kzpdr.search}
-\alias{kzpdr.spikes}
-\alias{kzpdr.valid}
 \title{Average Periodogram for Spatial Data in Given Directions}
 \usage{
 kzpdr(ds, angle, plot = F, pair = T, ...)
 
-kzpdr.spikes(rec = ls(1))
-
 kzpdr.3d(ds, angle, ...)
-
-kzpdr.eval(rec = ls(1), t.D = 2.5, t.F = 0.01, ...)
-
-kzpdr.search(rec = ls(1), t.D = seq(1, 10, 1), t.F = 0.01)
-
-kzpdr.valid(rec = ls(1), t.D = 3, t.F = 0.01, ...)
-
-kzpdr.estimate(rec = ls(1), scale = c(0.005, 1), ...)
 }
 \arguments{
 \item{ds}{Data array. Only 2 dimensional arrays are allowed for current version.}
@@ -64,31 +49,20 @@ orthogonal opposition at the same time.}
     by excluding \code{k} pairs of directional samples each time. 
     Default value is 1.
 }}
-
-\item{rec}{Data frame or list of the outputs of function \code{kzpdr}. 
-Includes the marked frequency values and corresponding directions.
-Defaults is searching for the available records in the environment.}
-
-\item{t.D}{Tolerance of direction (in degree).}
-
-\item{t.F}{Tolerance of frequency.}
-
-\item{scale}{The scale of gridding data.}
 }
 \value{
 The returned data list of function \code{kzpdr} includes the 
-		data frame for frequencies of spikes on mean periodograms 
-		of each checked direction. 
+	data frame for frequencies of spikes on mean periodograms of each
+	checked direction. It also includes a vector recording the md5sum
+	value of the spatial wave data array for internal control.
 
-		    Both \code{kzpdr.eval} and \code{kzpdr.estimate} will provide suggested 
-			wave frequency and direction values. The data frame of detailed estimation 
-		for each direction are also include in their outputs. Beside these,   
-		\code{kzpdr.estimate} can generate 3D or 2D plots for the supports of each 
-		suggested wave on direction-frequency parameter plane. 
+	    Function \code{kzpdr} will output the periodogram plots when 
+	option \code{plot} is set as TRUE. The frequencies of marked spikes 
+	will also be print out for each sampling direction.
 		
-		    \code{kzpdr.3d} returns back the data frame for re-gridded mean 
-			periodogram for data series in given direction, as showed in the 
-		perspective plot.
+	    \code{kzpdr.3d} returns back the data frame for re-gridded mean 
+		periodogram for data series in given direction, as showed in the 
+	perspective plot.
 }
 \description{
 Functions in this group are designed to check periodogram for data series 
@@ -100,31 +74,14 @@ these pattern records will be sent to \code{kzpdr.eval} or \code{kzpdr.estimate}
 to estimate the wave frequecies and directions.
 }
 \details{
-The average periodograms for a few pairs of orthogonal spatial
-		directions can help to identify frequencies and directions of waves.
+\code{kzpdr} is used to sample the spatial data and generates 
+	periodograms in orthogonal direction pairs; the frequencies of spikes 
+	for each directional periodogram are identified and recorded as the 
+	function output. The spike pattern of average periodograms for spatial
+	directions can help to identify wave frequencies and directions.
 
-		    First, function \code{kzpdr} samples the spatial data and generates 
-		periodograms in orthogonal direction pairs, and the frequencies of spikes 
-		for each directional periodogram are identified and recorded as the output. 
-
-			Then, \code{kzpdr.spikes} can be used to summarized the outputs of  
-		\code{kzpdr}. Function \code{kzpdr.eval} or \code{kzpdr.estimate} all
-		can be used to estimate the wave parameters (frequencies and directions).
-		\code{kzpdr.estimate} can provide visualization of the results, and it is
-		more convenient to use.
-
-		    Usually, if noise level is low, periodograms of a few direction pairs 
-		may provide satisfied results. But when the noise is high, you may need to 
-		intensively sample on different directions over the spatial data array with 
-		\code{kzpdr}. Generally speaking, when the number of samples increases,
-		the estimation will become more stable and reliable. 
-
-			Some other functions could be helpful in this procedure. \code{kzpdr.search}
-		will search the feasible tolerance settings for wave parameter estimation; 
-		Function \code{kzpdr.valid} can provide some kind of cross-validation information
-		for the estimation results of \code{kzpdr.eval} and \code{kzpdr.estimate};
-		Function \code{kzpdr.3d} will provide 3D perspective plot as the global view for  
-		periodograms of data series in a given direction.
+	    Function \code{kzpdr.3d} will provide 3D perspective plot as the   
+	global view for periodograms of data series in a given direction.
 }
 \examples{
 dx <- 300			 
@@ -138,35 +95,30 @@ b$v2 <- sin(f2*2*pi*(b$x*cos(q2)+b$y*sin(q2))+100*runif(1))
 
 a <- array(0,c(dx,dy))
 a[as.matrix(b[,1:2])] <- b$v1 + 1.5*b$v2
-# persp(1:dx, 1:dy, a, theta=90, phi=-110, 
-#	ticktype="detailed", col="lightblue")
+persp(1:dx, 1:dy, a, theta=90, phi=-110, 
+	ticktype="detailed", col="lightblue")
 a <- a + 5*matrix(rnorm(dx*dy,0,1),ncol=dy)
-# persp(1:dx, 1:dy, a, theta=90, phi=-110, 
-#	ticktype="detailed", col="lightblue")
+persp(1:dx, 1:dy, a, theta=90, phi=-110, 
+	ticktype="detailed", col="lightblue")
 
-# It may take a few minutes
-# o <- kzpdr.3d(a, -pi/6)
+# It may take about 30 seconds
+# o <- kzpdr.3d(a, -pi/6) 
+
+# Load pre-saved data to save running-time
+data(kzpdr.demo);
 
 # sampling, it may take a few minutes 
-# e <- kzpdr(a, c(0, pi/4, pi/3, -pi/3, pi/18), plot=TRUE)
+# system.time(kzpdr.demo <- kzpdr(a, pi/12, pair=FALSE, plot=TRUE)) 
+# system.time(kzpdr.demo <- kzpdr(a, pi/12, plot=TRUE))
+# system.time(kzpdr.demo <- kzpdr(a, c(0, pi/6, pi/4, pi/3), plot=TRUE))
+ 
+kzpdr.spikes(kzpdr.demo)
 
-# load pre-saved data to save running-time
-data(kzpdr.demo); e <- kzpdr.demo; rm(kzpdr.demo)
-
-# counting spikes
-kzpdr.spikes(e)
-
-# search for tolerance 
-kzpdr.search(e, t.D = c(1,2,3), t.F = c(0.005))
-
-# estimate the wave parameters
-kzpdr.eval(e, t.D = 3, t.F = 0.01)
-
-# visualization
-kzpdr.estimate(e)
+# For identification of the wave parameters, see kzpdr.estimate
 }
 \seealso{
-\code{\link[kzft]{kzp}}, \code{\link{kzp2}}
+\code{\link{kzp2}}, \code{\link{kzpdr.tol}}, \code{\link{kzpdr.eval}}
+  			\code{\link{kzpdr.valid}}, \code{\link{kzpdr.spikes}}
 }
 \concept{
 Kolmogorov-Zurbenko periodogram

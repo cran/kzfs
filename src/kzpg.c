@@ -50,7 +50,7 @@ SEXP kzpg(SEXP pg, SEXP c, SEXP m)
         }
     }
 	
-    for (int i = 2; i <= N1; i++) {
+    for (int i = 2; i < N1; i++) {
 		if ((INTEGER(W)[i-1] > MAX(INTEGER(W)[i-2],INTEGER(W)[i])) & 
 			(pgp[i-1] > MAX(pgp[i-2],pgp[i]))) {
 				INTEGER(W)[i-1] = MAX(INTEGER(W)[i-1]-2,1);

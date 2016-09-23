@@ -4,14 +4,11 @@
 \alias{kzp2}
 \alias{kzp2.summary}
 \alias{smooth.kzp2}
-\alias{winsize.kzp2}
 \title{Check Images' Motion Scales with 2D KZ Periodogram Signals}
 \usage{
 kzp2(x, m = dim(x), k = 1, ...)
 
 smooth.kzp2(rpg, dpct = 0.01, w = dim(rpg), k = 1)
-
-winsize.kzp2(rpg, dpct, w)
 
 kzp2.summary(spg, rg.x, rg.y = rg.x)
 }
@@ -34,14 +31,14 @@ Default value is set to data array size.}
                 a percentage of the total length of the data series
 }}
 
-\item{rpg}{Array of raw 2D periodogram.}
+\item{rpg}{Array of raw 2D periodogram. Usually it is part of output of \code{kzp2}.}
 
 \item{dpct}{A pre-specified percentage of total variation.
 Default value is 1\%.}
 
 \item{w}{Smoothing window size. Defaults to data array dimension.}
 
-\item{spg}{Array of smoothed 2D periodogram.}
+\item{spg}{Array of smoothed 2D periodogram. It could be output of \code{summary.kzp2}.}
 
 \item{rg.x}{Frequency range for x direction. Defaults to c(0, 0.5).}
 
@@ -64,15 +61,13 @@ Functions used to reveal directional and scale information
 with 2D KZ periodograms for spatial motions covered by heavy noises. 
 
    One can get 2D raw periodogram with function \code{kzp2}, and smooth the
-2D periodogram with function \code{smooth.kzp2}. Function \code{winsize.kzp2},  
-which is implemented in C, is used to calculate the adaptive smoothing window sizes 
-of 2-dimensional DiRienzo-Zurbenko smoothing algorithm of 2D KZ periodogram. 
+2D periodogram with function \code{smooth.kzp2}. 
 
    Function \code{summary.kzp2} can help to summarize direction and frequency 
  information from smoothed 2D KZ periodogram.
 }
 \details{
-KZ 2D raw spectrum is calculated based on \code{kzft::kzft}.
+KZ 2D raw spectrum is calculated based on \code{kz.ft}.
 		The smoothing method is an extension of \code{kzft::smooth.kzp}.
 		See introduction of DZ method in \code{kzft::smooth.kzp} for more 
 		information.
@@ -112,7 +107,7 @@ kzp2.summary(sp)		# direction & frequency
 
 }
 \seealso{
-\code{\link[kzft]{kzp}}
+\code{\link{kzpdr}}, \code{\link{kzpdr.eval}}, \code{\link{kzpdr.spikes}}
 }
 \concept{
 Kolmogorov-Zurbenko periodogram

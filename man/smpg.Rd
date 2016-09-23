@@ -2,97 +2,72 @@
 % Please edit documentation in R/smpg.R
 \name{smpg}
 \alias{kz.smpg}
-\alias{smooth.kzp}
 \alias{smpg}
-\alias{smpg.plot}
 \title{Smooth and Plot One Dimensional Kolmogorov-Zurbenko Periodogram}
 \usage{
-kz.smpg(sd, dpct = 0.01, rg = c(0, 0.5), log = F, plot = F, ...)
-
-smooth.kzp(rpg, dpct, w = length(rpg))
-
-smpg.plot(spg, freq, Title, dpct, angle, ...)
+kz.smpg(x, dpct = 0.01, rg = c(0, 0.5), log = F, plot = F, ...)
 }
 \arguments{
-\item{sd}{The data vector for analyses. Missing values are allowed.}
+\item{x}{The data vector for analyses. Missing values are allowed.}
 
 \item{dpct}{A pre-specified percentage of total variation. 
 Defaults to 1\%.}
 
 \item{rg}{The frequency range of the outputted periodogram.
-Default is 0 to 0.5, or 2 to infinite time-steps per period}
+Default is 0 to 0.5.}
 
 \item{log}{TRUE or FLASE. Use log scale for output periodogram. Defaults to FLASE.}
 
 \item{plot}{TRUE or FLASE. Flag for output periodogram plot or not. 
 Defaults to FLASE.}
 
-\item{...}{Other arguments. See details section for more information.}
-
-\item{rpg}{Vector of raw periodogram.}
-
-\item{w}{Size of smoothing window.}
-
-\item{spg}{Data vector of periodogram values.}
-
-\item{freq}{Data vector of frequency values.}
-
-\item{Title}{String. Used to mark the periodogram plot.}
-
-\item{angle}{Direction of periodogram. Default is missing.}
+\item{...}{Other arguments. 
+\itemize{
+ \item    \code{m : } The window size for a regular Fourier transform
+ \item    \code{k : } The number of iterations for the KZFT
+ \item    \code{n : }    The sampling frequency rate as a multiplication 
+            of the Fourier frequencies
+ \item    \code{p : } The distance between two successive intervals as 
+            a percentage of the total length of the data series
+ \item   \code{w : }    Size of smoothing window. Default value is 20.
+ \item \code{lvl : }                                                        
+    "min" or "max". Threshold strategy for marking frequency 
+    spikes. "min" is used for cases with weak singles mixed 
+    with dominating strong spikes. Defaults to "max".
+ \item \code{cut : }                            
+    Set the minimum value for a marked frequency spike. Recommend
+    to use argument \code{lvl} instead of setting this value directly.
+}}
 }
 \value{
 Data frame for outputted periodogram, including column \emph{spg} 
-		for the periodogram values, and the frequency \emph{freq}.
+			for the periodogram values, and \emph{freq} for the frequencies.
 }
 \description{
-Functions designed to smooth and plot 1D KZ periodogram easily.
-
-   Function \code{smooth.kzp} is an improved version of DZ smoothing
-   algorithm with asymmetrical window sizes, implemented in C.
-
-   \code{plot.smpg} outputs 1D KZ periodogram plots, marks the 
-   frequencies for spectral spikes on smoothed periodogram.
-
-   \code{kz.smpg} is a user-friendly wrapper of 3 functions:
-   \code{kzft::kzp}, \code{smooth.kzp}, and \code{plot.smpg}.
+\code{kz.smpg} is designed to smooth and plot 1D KZ periodogram easily.
    It will calculate the raw periodogram, mark the spikes, 
    smooth the periodogram, and then output the plot.
 }
 \details{
-Other arguments for function \code{kz.smpg}:
-
-\itemize{
- \item	\code{m : } The window size for a regular Fourier transform
- \item	\code{k : } The number of iterations for the KZFT
- \item	\code{n : }	The sampling frequency rate as a multiplication 
-			of the Fourier frequencies
- \item	\code{p : } The distance between two successive intervals as 
-			a percentage of the total length of the data series
- \item   \code{w : }	Size of smoothing window. Default value is 20.
-}
-
-Other arguments for function \code{smpg.plot}:
-
-\itemize{
- \item \code{lvl : }														
-	"min" or "max". Threshold strategy for marking frequency 
-	spikes. "min" is used for cases with weak singles mixed 
-	with dominating strong spikes. Defaults to "max".
- \item \code{cut : }							
-	Set the minimum value for a marked frequency spike. Recommend
-	to use argument \code{lvl} instead of setting this value directly.
-}
+The smoothing process is based on a modified DiRienzo-Zurbenko (DZ) 
+  method, for which the smoothing window is not symmetric around the 
+  value point. The smoothing algorithm is implemented in C.
 }
 \examples{
 ## Adapted from kzft::kzp example 2
 t <- 1:2000
-y <- 1.1*sin(2*pi*0.0355*t)+7*sin(2*pi*0.0365*t)+5*rnorm(length(t),0,1)
-op <- kz.smpg(y, dpct=0.0010, rg=c(0.025,0.05), plot=TRUE, log=TRUE)
-op <- kz.smpg(y, dpct=0.0001, rg=c(0.025,0.05), plot=TRUE, lvl="min")
+y <- 1.1*sin(2*pi*0.0339*t)+7*sin(2*pi*0.0366*t)+5*rnorm(length(t),0,1)
+y[sample(t,100,replace=FALSE)] <- NA
+
+\dontrun{
+# system.time(op <- kz.smpg(y, dpct=0.0001, rg=c(0.025,0.05),  
+#		plot=TRUE, log=TRUE, lvl="min", n=10, k=2))
+}
+op <- kz.smpg(y, dpct=0.0000, f=c(0.0339,0.0366), rg=c(0.025,0.05), 
+	n=10, k=2, plot=TRUE, lvl="min", log=FALSE)
 }
 \seealso{
-\code{\link[kzft]{kzp}}
+\code{\link[kzft]{kzp}}, \code{\link{kzp2}}, \code{\link{kz.ft}}
 }
 \concept{
 Kolmogorov-Zurbenko periodogram

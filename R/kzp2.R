@@ -7,9 +7,7 @@
 #' with 2D KZ periodograms for spatial motions covered by heavy noises. 
 #'
 #'    One can get 2D raw periodogram with function \code{kzp2}, and smooth the
-#' 2D periodogram with function \code{smooth.kzp2}. Function \code{winsize.kzp2},  
-#' which is implemented in C, is used to calculate the adaptive smoothing window sizes 
-#' of 2-dimensional DiRienzo-Zurbenko smoothing algorithm of 2D KZ periodogram. 
+#' 2D periodogram with function \code{smooth.kzp2}. 
 #' 
 #'    Function \code{summary.kzp2} can help to summarize direction and frequency 
 #'  information from smoothed 2D KZ periodogram. 
@@ -29,10 +27,10 @@
 #'	 \item	\code{p : } The distance between two successive intervals as 
 #'					a percentage of the total length of the data series
 #' }
-#' @param   rpg 	Array of raw 2D periodogram.
-#' @param   spg 	Array of smoothed 2D periodogram.
+#' @param   rpg 	Array of raw 2D periodogram. Usually it is part of output of \code{kzp2}.
+#' @param   spg 	Array of smoothed 2D periodogram. It could be output of \code{summary.kzp2}.
 #'
-#' @details		KZ 2D raw spectrum is calculated based on \code{kzft::kzft}.
+#' @details		KZ 2D raw spectrum is calculated based on \code{kz.ft}.
 #'			The smoothing method is an extension of \code{kzft::smooth.kzp}.
 #'			See introduction of DZ method in \code{kzft::smooth.kzp} for more 
 #'			information.
@@ -52,8 +50,8 @@
 #' @concept 	2-dimensional periodogram
 #' @concept 	2D periodogram
 #' @export
-#' @seealso		\code{\link[kzft]{kzp}}
-#'
+#' @seealso		\code{\link{kzpdr}}, \code{\link{kzpdr.eval}}, \code{\link{kzpdr.spikes}}
+#
 #' @examples
 #'	dx <- 100				# x range
 #'	dy <- 120				# y range
@@ -92,21 +90,22 @@
 kzp2 <- function(x, m = dim(x), k = 1, ...) {
    dx <- dim(x)[1]
    dy <- dim(x)[2]
+   x <- x - min(x, na.rm = TRUE) + 1
    x[is.na(x)] <- 0
    if (!hasArg("n")) { n <- 1 }
    alpha <- array(0,n*c(dx,dy))
    for (i in (1:dy)) {
-   	alpha[,i] <- kzft::kzft(x[,i],m=m[1],k=k,...)$fft
+   	alpha[,i] <- kz.ft(x[,i],m=m[1],k=k,...)$fft
    }
    beta <- array(0,n*c(dx,dy))
    for (i in (1:dx)) {
-   	beta[i,] <- kzft::kzft(alpha[i,],m=m[2],k=k,...)$fft
+   	beta[i,] <- kz.ft(alpha[i,],m=m[2],k=k,...)$fft
    }
    fx <- (1:(n*dx/2))/(n*dx)
    fy <- (1:(n*dy/2))/(n*dy)
    z <- (abs(beta))^2
    z <- z[1:length(fx),1:length(fy)]
-   return(list(freq.x=fx,freq.y=fy,kzp2d=z))
+   return(list(freq.x=fx,freq.y=fy,kzp2d=z,kzft2=beta))
 }
 
 
@@ -161,10 +160,11 @@ smooth.kzp2 <- function(rpg, dpct = 0.01, w = dim(rpg), k = 1)
 # -----------------------------------------------------------------------
 #      Get Adaptive Smoothing Windows Size for 2D DZ Algorithm
 #
-#  Window size for simple linear smoother (1 aspect of 2D)
-#
-#' @rdname  kzp2
-#' @export
+#  Window size for simple linear 2D smoother (1 aspect of 2D)
+#  Internal function \code{winsize.kzp2} is implemented in C. 
+#  It is called twice by \code{smooth.kzp2} to calculate the 
+#  adaptive smoothing window sizes of 2D DiRienzo-Zurbenko 
+#  smoothing algorithm.
 # -----------------------------------------------------------------------
 
 winsize.kzp2 <- function(rpg, dpct, w)
@@ -177,11 +177,12 @@ winsize.kzp2 <- function(rpg, dpct, w)
 
 # -----------------------------------------------------------------------
 #       Get Direction and Frequency Information in 2D Periodogram
-#' @rdname  kzp2
+#
 #' @param   rg.x	Frequency range for x direction. Defaults to c(0, 0.5). 
 #' @param   rg.y 	Frequency range for y direction. 
 #'			Defaults to the same value of the range for x direction.
 #' @export
+#' @rdname  kzp2
 # -----------------------------------------------------------------------
 
 kzp2.summary <- function (spg, rg.x, rg.y=rg.x) 

@@ -14,6 +14,11 @@ in different direction. When both are covered by strong noise, data realization
 could be very noisy 3D structure. Similar examples can be presented in engineering,
 acoustics, astronomy, infection diseases developments and many other fields.
 
+    This package is designed for the separation of motion scales in 2D motion images 
+on different directions. To this end, KZ periodogram is utilized to identify spatial 
+directions and frequencies of wave signals, while KZ Fourier transform provides the
+reconstructed signals based on identified motion parameters. 
+
     By spectral analysis of original signal in different directions, we can discover 
 main directions in which different scale waves are propagating. Intuitively, sampling
 along the orthogonal direction of a wave will annihilate its frequency spike on the
@@ -23,16 +28,22 @@ This method can be enriched by finding the common projected spectral spikes that
 from a series of periodograms associated with different sampling directions. Identification  
 of wave frequencies can be done symmetrically.
 
-    This package is designed for the separation of motion scales in 2D motion images 
-on different directions based on KZ periodogram. It provides functions to check averaged 
+    For the task of identification, this package provides functions to check averaged 
 periodogram for data series in a given direction or a list of directions. Averaging of 
 these directional periodograms will help to stable the variance of spectrum. Functions are
 also provided for automatically identifying and marking prominent spectrum spikes. The closure
 of nearest-neighbors is used to detect the clusters formed by real waves on the frequency-
 direction plane. The algorithm is designed to resist incorrectly identified periodogram 
-signals caused by noises, and it can gives consistent estimations when the number of sampling 
-directions increase. The accuracy of the estimations can also be improved with the increase 
+signals caused by noises, and it gives consistent estimations when the number of sampling 
+directions increases. The accuracy of the estimations can also be improved with the increase 
 of the sampling number.
+
+    In the stage of signal reconstruction, KZ Fourier transform is a powerful tool to recover 
+signals series. Functions are designed to reconstruct 2D spatial waves from high noise background. 
+The reconstructed signal will be averaged along the vertical lines of its propagating
+direction. This will significantly reduce the noises. Phase shift caused by unmatched 
+window size and frequency is remedied with special design. This enables the KZ Fourier 
+transform be used in cases of short data series and small window sizes.
 }
 \references{
 \itemize{

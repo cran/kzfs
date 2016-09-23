@@ -1,52 +1,52 @@
 # --------------------------------------------------------------------------
-#' @title		
-#'		Internal Function Used In Wave Parameter Estimation
-#'
-#' @description
-#'    Function \code{commcore} is designed to find the common elements 
-#' in a given list, which is the pool of all potential parameters. The
-#' common elements should appear in most data groups of paired directional
-#' periodograms.
-#'
-#' 	\code{kzpdr.rec} will search all variables in R global environment  
-#' for available records of directional periodograms, and return the 
-#' specified part as output. 
-#'
-#'	\code{kzpdr.pairs} returns a list of all available pairs of sampling 
-#' directions and the counts number for the spikes on each direction.
-#'
-#'	\code{kzpdr.prj} is used for calculating the projected parameters
-#' based on directional periodograms.
-#'
-#'	Function \code{ckGV} refers to a given record set of directional
-#' periodogram and checks duplicated directions. The returned value is a 
-#' list of sampling directions without those duplications.
-#'
-#'	\code{shade} decides if a spectral signals would sometime disappear 
-#' in the given sampling directions. The return value is a vector of 0/1. 
-#' 0 means the signal should be seen in all given directions. 0 means not. 
-#' 2 and larger may happen when there are very closed sampling angles.
-#'
-#'	\code{tight} is used to get the minimum difference in a group of
-#' potential directions or frequencies. 
-#'
-#'	\code{tolerance} is used to calculate the tolerance of the estimations.
-#'
-#'	Function \code{closure} returns the closure of the nearest neighbors. 
-#'
-#'	\code{distill} excludes the duplicate supports of a cluster. Usually,
-#' duplications are supports for the same parameters but from the same pairs,
-#' grouping under the given tolerance condition.
-#'
-#' @param	pool		List for the potential parameters.
-#' @param	STEP		The tolerance interval for a data element.
-#'				Defaults to 1.
-#' @param	DIFF		The allowed absents times for a suggested 
-#'				common element. Default value is 1.
-#' @param   digit		Significant digits. Defaults to 0.
-#' @rdname	kzprj
-#' @export
-#' @keywords   internal
+#  @title		
+# 		Internal Function Used In Wave Parameter Estimation
+# 
+#  @description
+#     Function \code{commcore} is designed to find the common elements 
+#  in a given list, which is the pool of all potential parameters. The
+#  common elements should appear in most data groups of paired directional
+#  periodograms.
+# 
+#  	\code{kzpdr.rec} will search all variables in R global environment  
+#  for available records of directional periodograms, and return the 
+#  specified part as output. 
+# 
+# 	\code{kzpdr.pairs} returns a list of all available pairs of sampling 
+#  directions and the counts number for the spikes on each direction.
+# 
+# 	\code{kzpdr.prj} is used for calculating the projected parameters
+#  based on directional periodograms.
+# 
+# 	Function \code{ckGV} refers to a given record set of directional
+#  periodogram and checks duplicated directions. The returned value is a 
+#  list of sampling directions without those duplications.
+# 
+# 	\code{shade} decides if a spectral signals would sometime disappear 
+#  in the given sampling directions. The return value is a vector of 0/1. 
+#  0 means the signal should be seen in all given directions. 0 means not. 
+#  2 and larger may happen when there are very closed sampling angles.
+# 
+# 	\code{tight} is used to get the minimum difference in a group of
+#  potential directions or frequencies. 
+# 
+# 	\code{tolerance} is used to calculate the tolerance of the estimations.
+# 
+# 	Function \code{closure} returns the closure of the nearest neighbors. 
+# 
+# 	\code{distill} excludes the duplicate supports of a cluster. Usually,
+#  duplications are supports for the same parameters but from the same pairs,
+#  grouping under the given tolerance condition.
+# 
+#  @param	pool		List for the potential parameters.
+#  @param	STEP		The tolerance interval for a data element.
+# 				Defaults to 1.
+#  @param	DIFF		The allowed absents times for a suggested 
+# 				common element. Default value is 1.
+#  @param   digit		Significant digits. Defaults to 0.
+#  @rdname	kzprj
+#  @export
+#  @keywords   internal
 # ---------------------------------------------------------------------------
 
 commcore <- function(pool, STEP=1, DIFF=1, digit=0) {
@@ -119,8 +119,8 @@ commcore <- function(pool, STEP=1, DIFF=1, digit=0) {
 # -----------------------------------------------------------------------------
 #    Calculating of the projected parameters based on directional periodogram
 #
-#' @rdname kzprj
-#' @export
+#  @rdname kzprj
+#  @export
 # -----------------------------------------------------------------------------
 
 kzpdr.proj <- function(rec = ls(1)) {
@@ -186,14 +186,14 @@ kzpdr.proj <- function(rec = ls(1)) {
 # -----------------------------------------------------------------------------
 # 	Find available records of directional periodograms in R environment
 #
-#' @param  rec  Data frame or list of the outputs from function \code{kzpdr}. 
-#'		    It includes the marked spike frequencies and sampling directions.
-#'		    Default is for searching from all variables in the R environment. 
-#' @param  md5  MD5 code for the specified data array. The returned data will be
-#'		    the records for the array with the same MD5 code. The default is
-#'		    to return the first record variable in alphabet order.
-#' @rdname kzprj
-#' @export
+#  @param  rec  Data frame or list of the outputs from function \code{kzpdr}. 
+# 		    It includes the marked spike frequencies and sampling directions.
+# 		    Default is for searching from all variables in the R environment. 
+#  @param  md5  MD5 code for the specified data array. The returned data will be
+# 		    the records for the array with the same MD5 code. The default is
+# 		    to return the first record variable in alphabet order.
+#  @rdname kzprj
+#  @export
 # -----------------------------------------------------------------------------
 
 kzpdr.rec <- function(rec = ls(1), md5="") {
@@ -227,7 +227,7 @@ kzpdr.rec <- function(rec = ls(1), md5="") {
 	nc <- which(nc)
 	rec <- get0(nm[nc[1]])
 	md5 <- as.vector(rec$MD5)
-	if (length(md5)>0) cat("\n",md5,"\n\n")
+	# if (length(md5)>0) cat("\n",md5,"\n\n")
    }
    if (length(rec)==0) return(rec)
    if ("MD5" %in% names(rec)) rec <- rec$rec
@@ -245,8 +245,8 @@ kzpdr.rec <- function(rec = ls(1), md5="") {
 # 
 #  Returned value is a list of counts and direction pairs.
 #
-#' @rdname kzprj
-#' @export
+#  @rdname kzprj
+#  @export
 # -----------------------------------------------------------------------------
 
 kzpdr.pairs <- function(rec = ls(1)) {
@@ -267,9 +267,9 @@ kzpdr.pairs <- function(rec = ls(1)) {
 # -----------------------------------------------------------------
 #		Check and delete duplicated sampling directions
 # 
-#' @param 	angle	 	Vector of sampling directions in radian.
-#' @rdname	kzprj
-#' @export
+#  @param 	angle	 	Vector of sampling directions in radian.
+#  @rdname	kzprj
+#  @export
 # -----------------------------------------------------------------
 
 ckGV <- function(angle, rec) {
@@ -287,11 +287,11 @@ ckGV <- function(angle, rec) {
 # ------------------------------------------------------------------------------
 #   Check if spectral signals would sometimes disappear in given directions
 # 
-#' @param	alpha		Vector of checked directions in degree.
-#' @param	   gs    	Vector of directions for all available periodograms.
-#' @param	   cc	   	Tolerance of wave parameters. Defaults to 3.
-#' @rdname	kzprj
-#' @export
+#  @param	alpha		Vector of checked directions in degree.
+#  @param	   gs    	Vector of directions for all available periodograms.
+#  @param	   cc	   	Tolerance of wave parameters. Defaults to 3.
+#  @rdname	kzprj
+#  @export
 # -----------------------------------------------------------------------------
 
 shade <- function(alpha, gs, cc=3){
@@ -314,8 +314,8 @@ shade <- function(alpha, gs, cc=3){
 #
 #  Used to find the tolerance of the estimations. 
 #  The argument \code{alpha} and \code{gs} could be frequencies for this function.
-#' @rdname	kzprj
-#' @export
+#  @rdname	kzprj
+#  @export
 # -----------------------------------------------------------------------------
 
 tight <- function(alpha, gs, cc=3){
@@ -340,10 +340,10 @@ tight <- function(alpha, gs, cc=3){
 
 # ------------------------------------------------------------------------------
 #  Calculate the tolerance of the estimations. 
-#' @param	 tm2		Data frame. Internal data table for potential parameters.
-#' @param  scale		The scale of gridding data. 
-#' @rdname	kzprj
-#' @export
+#  @param	 tm2		Data frame. Internal data table for potential parameters.
+#  @param  scale		The scale of gridding data. 
+#  @rdname	kzprj
+#  @export
 # -----------------------------------------------------------------------------
 
 tolerance <- function(tm2, scale, tol=1) {
@@ -364,10 +364,10 @@ tolerance <- function(tm2, scale, tol=1) {
 
 # ------------------------------------------------------------------------------
 #  Find the closure of nearest neighbors. 
-#' @param	mdc		Integer. Specified approximate size of the closure.
-#' @param	 sc		Numeric. Specified tolerance level of the cluster.
-#' @rdname	kzprj
-#' @export
+#  @param	mdc		Integer. Specified approximate size of the closure.
+#  @param	 sc		Numeric. Specified tolerance level of the cluster.
+#  @rdname	kzprj
+#  @export
 # -----------------------------------------------------------------------------
 
 closure <- function(tm2, mdc, sc) {
@@ -422,8 +422,8 @@ closure <- function(tm2, mdc, sc) {
 #
 #  Duplication is support for one potential parameter but from the same pair of
 #  directional periodogram, grouping under the given tolerance condition.
-#' @rdname	kzprj
-#' @export
+#  @rdname	kzprj
+#  @export
 # -----------------------------------------------------------------------------
 
 distill <- function(tm2, mdc) {
