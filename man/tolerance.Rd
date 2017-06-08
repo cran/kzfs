@@ -42,4 +42,3 @@ kzpdr.tol(kzpdr.demo, t.D = c(1,2,3), t.F = 0.005)
 \code{\link{kzpdr}}, \code{\link{kzpdr.eval}}
  			\code{\link{kzpdr.valid}}, \code{\link{kzpdr.spikes}}
 }
-

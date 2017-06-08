@@ -42,7 +42,7 @@
 #'				for the periodogram values, and \emph{freq} for the frequencies.
 #' @rdname 		smpg
 #' @name 		smpg
-#' @useDynLib 	kzfs
+#' @useDynLib 	kzfs, .registration = TRUE
 #' @export		kz.smpg
 #' @keywords 	KZ-periodogram
 #' @concept     	Kolmogorov-Zurbenko periodogram
@@ -129,8 +129,10 @@ smpg.plot <- function(spg, freq, Title, angle, ...) {
 	dots <- list(...)
 	method <- "DZ"
 	if (hasArg("dpct")){ dpct <- dots$dpct} else { dpct <- 0.01 }
+	if (hasArg("raw")) { raw <- dots$raw } else { raw <- FALSE }
+	if (raw) { dpct <- 0 }
 	if (missing(Title)) Title <- "Smoothed Periodogram"
-	xl <- "Frequency (cycles/unit time)"
+	xl <- "Frequency (cycles/unit interval)"
 	tl <- ""
 	if (exists("dpct")) tl <- paste(100*dpct,"%", sep="")
 	tl <- paste(tl, method)

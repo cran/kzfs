@@ -142,8 +142,8 @@ kzpdr.proj <- function(rec = ls(1)) {
 	s2$fp <- sapply(s2$f2/cos(s2$agp.2),min, 100)
 	s3 <- s1[s1$f1>0.29 & s1$fp>0.5 & s1$fp<=1,]
 	s4 <- s2[s2$f2>0.29 & s2$fp>0.5 & s2$fp<=1,]
-	s3 <- s3[s3$g2>=45 & s3$g2<=90,]
-	s4 <- s4[s4$g2>=45 & s4$g2<=90,]
+	# s3 <- s3[s3$g2>=45 & s3$g2<=90,]
+	# s4 <- s4[s4$g2>=45 & s4$g2<=90,]
 	s3$f1 <- 1 - s3$f1
 	s4$f2 <- 1 - s4$f2
 	s1 <- rbind(s1, s3)
@@ -420,7 +420,7 @@ closure <- function(tm2, mdc, sc) {
 # ------------------------------------------------------------------------------
 #  			Exclude the duplicate supports in a cluster
 #
-#  Duplication is support for one potential parameter but from the same pair of
+#  Duplication are supports for one potential parameter but from the same pair of
 #  directional periodogram, grouping under the given tolerance condition.
 #  @rdname	kzprj
 #  @export
@@ -433,6 +433,15 @@ distill <- function(tm2, mdc) {
 	tmpv <- split(rownames(tm2),f=tm2$id)
 	tmpv <- as.vector(sapply(tmpv, FUN=function(m) m[1]))
    tm2 <- tm2[rownames(tm2) %in% tmpv, 1:7]
+	# tmpv <- aggregate(cbind(tm2[,1:2]), by=list(tm2$grp,tm2$pair), FUN=mean)
+	# names(tmpv)[1:2] <- c("grp","pair")
+	# tmpw <- aggregate(cbind(tm2[,c(3,5)]), by=list(tm2$grp,tm2$pair), FUN=min)
+	# names(tmpw)[1:2] <- c("grp","pair")
+	# tmpv <- merge(tmpv, tmpw)
+	# tmpw <- aggregate(cbind(tm2[,c(3,6)]), by=list(tm2$grp,tm2$pair), FUN=sum)
+	# names(tmpw)[1:2] <- c("grp","pair")
+	# tmpv <- merge(tmpv, tmpw[,c(1,2,4)])
+	# tm2 <- tmpv[,names(tm2)]
    tm2 <- tm2[order(tm2$grp),]
 	tmpv <- split(tm2$pair,f=tm2$grp)
 	tmpw <- sapply(sapply(tmpv,unique),FUN=function(m) !is.na(m))
@@ -451,7 +460,7 @@ distill <- function(tm2, mdc) {
 	tmpv <- split(tm2[!tm2$tw,]$freq, f=tm2[!tm2$tw,]$grp)
 	tmpw <- as.vector(sapply(tmpv, median))
 	tmpv <- split(tm2$freq, f=tm2$grp)
-	tmpv <- as.vector(sapply(lapply(tmpv, '>', 0),sum))
+	tmpv <- as.vector(sapply(lapply(tmpv, '>', -1),sum))
    tm2$medf <- rep(tmpw, tmpv)
 	tmpw <- split(tm2[!tm2$tw,]$direction, f=tm2[!tm2$tw,]$grp)
 	tmpw <- as.vector(sapply(tmpw, median))

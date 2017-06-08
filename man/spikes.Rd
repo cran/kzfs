@@ -48,4 +48,3 @@ kzpdr.spikes(kzpdr.demo)
 \code{\link{kzpdr}}, \code{\link{kzpdr.eval}}
  			\code{\link{kzpdr.valid}}, \code{\link{kzpdr.tol}}
 }
-

@@ -9,7 +9,7 @@
 #'    \code{kzpdr} samples the data of wave field, and outputs the average
 #' pattern of periodogram for series in a given direction. A collection of 
 #' these pattern records will be sent to \code{kzpdr.eval} or \code{kzpdr.estimate} 
-#' to estimate the wave frequecies and directions.   
+#' to estimate the wave frequencies and directions.   
 #'
 #' @param	t.D	Tolerance of direction in degree. Default is 2.
 #' @param	t.F	Tolerance of frequency. Default value is 0.01.
@@ -34,7 +34,7 @@
 #'	periodograms in orthogonal direction pairs, and the frequencies of spikes 
 #'	for each directional periodogram are identified and recorded as the output. 
 #'
-#'	    Then, \code{kzpdr.spikes} can be used to summarized the outputs of  
+#'	    Then, \code{kzpdr.spikes} can be used to summarize the outputs of  
 #'	\code{kzpdr}. Function \code{kzpdr.eval} or \code{kzpdr.estimate} all
 #'	can be used to estimate the wave parameters (frequencies and directions).
 #'	\code{kzpdr.estimate} is based on clustering-closure and the tolerances
@@ -50,7 +50,7 @@
 #' @return
 #' 	    Both \code{kzpdr.eval} and \code{kzpdr.estimate} will return suggested 
 #' 	wave frequency and direction values. The data frame of detailed estimation 
-#'	for each direction are also include in their returned data list. Beside these,   
+#'	for each direction is also included in their returned data list. Beside these,   
 #'	\code{kzpdr.estimate} can generate 3D or 2D plots for the supports of each 
 #'	suggested wave on direction-frequency parameter plane. 
 # 
@@ -95,8 +95,11 @@ kzpdr.eval <- function(rec = ls(1),	t.D = 2, t.F = 0.01, ...) {
    }
    loopct <- 1; loopct2 <- 1;
    allpairs <- unique(cmbf$dir)
-   if (length(allpairs)<3) stop("No enough data!\n\n")
+   if (length(allpairs)<3) {
 	# return(list(df=cmbf[0,]))
+	cat("No enough data!!\n\n")
+	return(data.frame(direction=NULL, freq=NULL))
+   }
    sv.cmbf <- cmbf
    cmbf <- cmbf[order(cmbf$dir, cmbf$agp.2, cmbf$sf),]
    while (TRUE) {
@@ -247,6 +250,7 @@ kzpdr.estimate <- function(rec = ls(1), ...) {
 	cat("\n")
    }
    dots <- list(...)
+   if (hasArg("plot")){ plot  <- dots$plot  } else { plot  <- TRUE } 
    if (hasArg("sd"))  { sd  <- dots$sd  } else { sd  <- 0 } 
    if (hasArg("tol")) { tol <- dots$tol } else { tol <- 1 }
    if (hasArg("D3"))  { D3  <- dots$D3  } else { D3  <- FALSE }
@@ -255,7 +259,10 @@ kzpdr.estimate <- function(rec = ls(1), ...) {
    cmbf$sd <- shade(cmbf$apha, cmbf$g1, cc=6) 
    cmbf <- cmbf[order(cmbf$dir, cmbf$agp.2, cmbf$sf),]
    allpairs <- sort(unique(cmbf$dir))
-   if (length(allpairs)<3) stop("No enough data!!\n\n")
+   if (length(allpairs)<3) {
+	cat("No enough data!!\n\n")
+	return(data.frame(suggestion=data.frame(direction=NULL, freq=NULL)))
+   }
    dc <- max(length(allpairs)-sd, 1)
    mt <- cmbf[order(cmbf$agp.2, cmbf$sf),c("sf","agp.2","sd","dir")]
    mt$id <- as.numeric(row(mt)[,1])
@@ -281,7 +288,9 @@ kzpdr.estimate <- function(rec = ls(1), ...) {
    mt <- closure(mt, dc, scale)
    	mt3 <- mt[mt$closest,-which(names(mt)=="grpd")]
 	mt2 <- unique(rbind(mt2, mt3))
-   mt2 <- distill(mt2, dc)
+   if (dim(mt2)[1]>0) { 
+	mt2 <- distill(mt2, dc) 
+   }
    if (dim(mt2)[1]>0) {
 	tmpv <- lapply(split(mt2, f=mt2$grp), FUN=tolerance, scale, 1)
 	rule <- sapply(lapply(tmpv, FUN=">",  scale*3), any)
@@ -319,20 +328,33 @@ kzpdr.estimate <- function(rec = ls(1), ...) {
    mt <- mt[order(mt$grp),]
 	tmpv <- sapply(split(mt$grp>0, mt$grp), sum)
    mt$nbr <- rep(as.vector(tmpv), as.vector(tmpv))
-   mt3 <- distill(mt[,-6], 2)
+   if (dim(mt)[1]>0) { mt3 <- distill(mt[,-6], 2) }
    mt2 <- rbind(mt2, mt3)
    mt2 <- mt2[order(mt2$grp),]
    mt3 <- mt2						# all meaningful groups
    mt  <- mt[!(mt$id %in% mt2$id),-6]
-   mt$nbr <- 1
-   mt$grp <- 0
-   mtz <- rbind(mt2[,1:7], mt[,1:7])
-   mtz <- mt[order(mt$grp),]
+   if (dim(mt)[1]>0) {
+	mt$nbr <- 1; mt$grp <- 0
+	mtz <- rbind(mt2[,1:7], mt[,1:7])
+   } else {
+	mtz <- mt2[,1:7]
+   }
+   mtz <- mtz[order(mtz$grp),]
 	tmpv <- tolerance(mt2, scale, tol)
    t.d2 <- tmpv[2]
    t.f2 <- tmpv[1]
-   mt2 <- mt2[(mt2$nbr >= dc - mt2$sd & mt2$nbr >= 2) | mt2$nbr >= 6, ]	
+   mt8 <- (mt2[mt2$nbr == max(mt2$nbr), ])
+   mt8 <- aggregate(mt8[,1:2], by=list(mt8$grp), FUN=mean)
+   names(mt8) <- c("grp","avgf","avgd")
+   tmpv <- unique(mt2[ mt2$nbr == max(mt2$nbr), c("medf","medd", "grp")])
+   mt8 <- merge(mt8, tmpv)[,-1]
+   mt2 <- mt2[(mt2$nbr >= dc - mt2$sd & mt2$nbr >= 2) | mt2$nbr >= 6, ]
 	# selected wave parameters
+	wvnmbr <- kzpdr.spikes(rec)[1]
+	tmpv <- unique(mt2[,c("grp","nbr")])
+	tmpv <- tmpv[order(tmpv$nbr,decreasing = TRUE),]
+	if (length(tmpv$grp)>wvnmbr) tmpv <- tmpv[1:wvnmbr,]
+   mt2 <- mt2[mt2$grp %in% tmpv$grp,]
 	tmpv <- tolerance(mt2, scale, tol)
    t.d <- tmpv[2]
    t.f <- tmpv[1]
@@ -354,6 +376,9 @@ kzpdr.estimate <- function(rec = ls(1), ...) {
 	if (!raw) mtz <- mt2
 	mtz$df <- as.numeric(factor(mtz$pair))
 	mcol <- c(gray(0.5), rainbow(dc-1))
+	nbls <- sort(unique(mt3$nbr))
+	nbl2 <- sapply(nbls,min,3)
+	if (plot) {
 	par(mfrow=c(1,1), cex=1)
 	plot(x=mtz[,1], y=mtz[,2], xlab = "Frequency", ylim = c(-95, 95),  
 		ylab = enc2utf8("Direction (\xB0)"), xlim = c(0,0.5), yaxp = c(-100, 120, 11),
@@ -375,15 +400,14 @@ kzpdr.estimate <- function(rec = ls(1), ...) {
 	   	points(x=px, y=py, col="gray41", type="l", lty=21, lwd=0.5)
 	   }
 	}
-	nbls <- sort(unique(mt3$nbr))
-	nbl2 <- sapply(nbls,min,3)
 	mtext(mxt, line=0.25, col="gray21", cex=0.75)
 	legend("topright",legend=nbls, bty="o", cex=0.75, 
 		pch=nbls, horiz = TRUE, col=mcol[nbls], pt.lwd=nbl2)
+      }
 	return(list(suggestion=newrt, detail=mt4,
 			grouping_tolerance=data.frame(freq=t.f2, direction=t.d2,row.names = ""),
 			tolerance=data.frame(freq=t.f, direction=t.d,row.names = ""),
-			pairs=allpairs, support=support))
+			pairs=allpairs, support=support, max=mt8[,c(1:4)]))
    }
    # ------------------------------------------- grids by group and takes maximum values
    mtz <- mt3[, 1:7]
@@ -428,9 +452,9 @@ kzpdr.estimate <- function(rec = ls(1), ...) {
 	myrt <- list(suggestion=newrt[,1:3], detail=mt4, grid=smt2, 
 		grouping_tolerance=data.frame(freq=t.f2, direction=t.d2,row.names = ""),
 		tolerance=data.frame(freq=t.f, direction=t.d,row.names = ""),
-		pairs=allpairs, support=support)
+		pairs=allpairs, support=support, max=mt8[,c(1:4)])
    } 
-   mtext(mxt, line=0.25, col="gray21", cex=0.75)
+   mtext(mxt, line=0.25, col="gray21", cex=0.85)
    return(myrt)
 }
 

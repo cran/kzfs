@@ -7,7 +7,7 @@
 kzmd(ss, window, scale, k = 1, edges = TRUE)
 }
 \arguments{
-\item{ss}{Data frame with value column after time/space columns.}
+\item{ss}{Data frame with value column behind time/space coordinates.}
 
 \item{window}{Vector for window size of each dimension.}
 
@@ -19,7 +19,7 @@ kzmd(ss, window, scale, k = 1, edges = TRUE)
 are located outside the time-space range of input data.}
 }
 \value{
-Data framework with the similar structure as the input data.
+Data framework with value column behind time/space coordinates.
 }
 \description{
 This implement of spatial KZ-filter works for any dimensions. It is designed 
@@ -43,4 +43,3 @@ image(x=x, y=y, z=z)
 Kolmogorov-Zurbenko filter
 }
 \keyword{KZ-filter}
-

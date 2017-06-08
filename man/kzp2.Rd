@@ -2,28 +2,27 @@
 % Please edit documentation in R/kzp2.R
 \name{kzp2}
 \alias{kzp2}
-\alias{kzp2.summary}
 \alias{smooth.kzp2}
+\alias{kzp2.summary}
 \title{Check Images' Motion Scales with 2D KZ Periodogram Signals}
 \usage{
-kzp2(x, m = dim(x), k = 1, ...)
+kzp2(x, k = 1, m = dim(x)/k, ...)
 
-smooth.kzp2(rpg, dpct = 0.01, w = dim(rpg), k = 1)
+smooth.kzp2(rpg, dpct = 0.01, w = round(dim(rpg)/4), k = 1, ...)
 
-kzp2.summary(spg, rg.x, rg.y = rg.x)
+kzp2.summary(spg, rg.x, rg.y, num = 10)
 }
 \arguments{
 \item{x}{Data array of 2D wave field. Missing values are allowed.
 Limited to 2D arrays for current version.}
 
+\item{k}{The number of iterations for the KZFT. Default is 1.}
+
 \item{m}{The window size for a regular Fourier transform.
 Default value is set to data array size.}
 
-\item{k}{The number of iterations for the KZFT. Default is 1.}
-
 \item{...}{Arguments to be passed to methods.
 \itemize{
- \item    \code{w : } Smoothing window size. Defaults to data array size.
  \item    \code{k : } The number of iteration times of KZFT
  \item    \code{n : } The sampling frequency rate as a multiplication 
                 of the Fourier frequencies
@@ -36,7 +35,7 @@ Default value is set to data array size.}
 \item{dpct}{A pre-specified percentage of total variation.
 Default value is 1\%.}
 
-\item{w}{Smoothing window size. Defaults to data array dimension.}
+\item{w}{Smoothing window size.}
 
 \item{spg}{Array of smoothed 2D periodogram. It could be output of \code{summary.kzp2}.}
 
@@ -44,6 +43,8 @@ Default value is 1\%.}
 
 \item{rg.y}{Frequency range for y direction. 
 Defaults to the same value of the range for x direction.}
+
+\item{num}{Wave numbers. Defaults to 10.}
 }
 \value{
 Returned value of function \code{kzp2} is a data list of 
@@ -54,7 +55,7 @@ Returned value of function \code{kzp2} is a data list of
 			\code{smooth.kzp2} only outputs the array of smoothed values.
 		
 			\code{kzp2.summary} returns a data list for suggested wave 
-		paramenters, including frequecy and direction values.
+		parameters, including frequency and direction values.
 }
 \description{
 Functions used to reveal directional and scale information
@@ -64,7 +65,8 @@ with 2D KZ periodograms for spatial motions covered by heavy noises.
 2D periodogram with function \code{smooth.kzp2}. 
 
    Function \code{summary.kzp2} can help to summarize direction and frequency 
- information from smoothed 2D KZ periodogram.
+ information from smoothed 2D KZ periodogram. The input should be a 2D KZ
+ periodogram data with frequency range (0, 0.5] on both x- and y- axis.
 }
 \details{
 KZ 2D raw spectrum is calculated based on \code{kz.ft}.
@@ -117,4 +119,3 @@ Kolmogorov-Zurbenko periodogram
 2D periodogram
 }
 \keyword{2D-periodogram}
-

@@ -71,7 +71,7 @@ in a given direction or a list of directions.
    \code{kzpdr} samples the data of wave field, and outputs the average
 pattern of periodogram for series in a given direction. A collection of 
 these pattern records will be sent to \code{kzpdr.eval} or \code{kzpdr.estimate} 
-to estimate the wave frequecies and directions.
+to estimate the wave frequencies and directions.
 }
 \details{
 \code{kzpdr} is used to sample the spatial data and generates 
@@ -128,4 +128,3 @@ directional periodogram
 average periodogram
 }
 \keyword{directional-periodogram}
-

@@ -52,4 +52,3 @@ directional periodogram
 average periodogram
 }
 \keyword{directional-periodogram}
-

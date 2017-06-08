@@ -9,7 +9,7 @@
 #'    \code{kzpdr} samples the data of wave field, and outputs the average
 #' pattern of periodogram for series in a given direction. A collection of 
 #' these pattern records will be sent to \code{kzpdr.eval} or \code{kzpdr.estimate} 
-#' to estimate the wave frequecies and directions.   
+#' to estimate the wave frequencies and directions.   
 #'
 #' @rdname 	kzpdr
 #' @param     ds 	Data array. Only 2 dimensional arrays are allowed for current version.
@@ -115,12 +115,15 @@
 
 kzpdr <- function(ds, angle, plot=F, pair=T, ...) {
    dots <- list(...)
-   if (hasArg("w"))   {   w <- dots$w } else { w <- 20 }
    if (hasArg("dpct")){ dpct <- dots$dpct} else { dpct <- 0.01 }
    if (hasArg("log")) {  log <- dots$log } else { log <- FALSE }
    if (hasArg("raw")) {  raw <- dots$raw } else { raw <- FALSE }
    if (hasArg("frun")) { frun <- dots$frun } else { frun <- FALSE }
    if (hasArg("min.ln")) { min.ln <- dots$min.ln } else { min.ln <- 0.6 }
+        if (hasArg("k")) { k <- dots$k } else { k <- 1 } 
+        if (hasArg("n")) { n <- dots$n } else { n <- 1 } 
+        if (hasArg("w")) { w <- dots$w } else { w <- 20*n }
+        if (hasArg("cp")) { cp <- dots$cp } else { cp <- 0 } 
    md5 <- digest::digest(ds, algo="md5")
    rec0 <- kzpdr.rec(ls(1),md5)
    OL <- data.frame(freq = 0, spg = 0, id = 0)[0,]
@@ -155,38 +158,44 @@ kzpdr <- function(ds, angle, plot=F, pair=T, ...) {
    if (length(agls)==0) { return(list(MD5=md5,rec=rec0)) }
    df <- a2d(ds)
    for (i in 1:length(agls)) {
-  	wv <- getwave(df, agls[i])
+  	wv <- getwave(df, agls[i], cp=cp)
 	wv <- split(wv$obs,wv$e)
-	OL <- OL0
 	lm <- ifelse(abs(tan(agls[i])) >= 1, dim(ds)[2], dim(ds)[1])  
+	OL <- OL0
   	for (j in 1:length(wv)) {
 	   if (length(wv[[j]]) < (min.ln * lm))  next
-  	   sp <- kz.smpg(wv[[j]], ...)
-  	   sp$id <- j
-  	   sp$dr <- agls[i]*(180/pi)
-	   if (log) { sp$spg <- log(sp$spg) }
-         OL <- rbind(OL,sp)
+	   m <- floor(length(wv[[j]])/(2*k))*2
+	   kzp <- kz.ft(wv[[j]], m=m, adpt=F, phase=F, ...)[c(3,4)]
+	   OL <- rbind(OL,kzp)
   	}
-	sc <- min(OL[,1])
-  	y <- agrid(OL[,c(1,2,4)], scale=sc)
-	names(y) <- c("freq", "rpg", "id")
-	y$direction <- agls[i]
-	y$rpg[dim(y)[1]] <- mean(y$rpg[-dim(y)[1]])
+  	y <- agrid(OL, scale=min(OL[,1]))
+	names(y) <- c("freq", "rpg")
+	if (hasArg("f") & all(dots$f %in% unique(OL$f))) {
+  	   z <- aggregate(OL[OL[,2]!=0,]$pg,by=list(OL[OL[,2]!=0,]$f), FUN=mean)
+	   y[y$rpg>0,c(1,2)] <- c(z[,1],z[,2])
+	   raw <- TRUE
+	} else {
+	   y$rpg[dim(y)[1]] <- mean(y$rpg[-dim(y)[1]])
+	   if (hasArg("n") & n>1) { y[1:round(1.5*n),2] <- NA }
+	}
+	if (hasArg("cut")) {
+	   cut0 <- dots$cut
+	} else {
+	   cut0 <- mean(y$rpg, na.rm=TRUE) + 2*sd(y$rpg, na.rm=TRUE)
+	}
 	if (raw) {
-	   y$spg <- y$rpg
+	   y$spg <- y$rpg; dpct <- 0;
 	} else {
 	   y$spg <- smooth.kzp(y$rpg, dpct=dpct, w=w)
 	}
-	ok.n <- (min(1/dim(ds)[1], 1/dim(ds)[2]))/sc
-	if (hasArg("n") & ok.n>1) { y[1:ok.n,2] <- y[ok.n,2] }
-   	cut0 <- mean(y$rpg, na.rm=TRUE) + 2*sd(y$rpg, na.rm=TRUE)
 	if (plot) {
-	   dev.new(); 
+	   # dev.new(); 
  	   rec <- smpg.plot(spg=y$spg,freq=y$freq,cut=cut0,
 			Title="Mean Periodogram",angle=agls[i], ...)
 	} else {
-	   rec <- markspikes(x.fq=c(0,y[,1]),y.spm=c(min(y[,2]),y[,2]), plot=FALSE, ...)
+	   rec <- markspikes(x.fq=c(0,y[,1]),y.spm=c(min(y[,2]),y[,2]), cut=cut0,plot=FALSE, ...)
 	   okag <- paste(round((180/pi)*agls[i],2),enc2utf8("\xB0"),sep="")
+	   if (length(rec)==0) rec=NA
 	   rec <- data.frame(direction=okag, freq=rec)
 	}
 	pgrt <- y[y$freq %in% rec$freq,c("freq","spg")]
@@ -202,7 +211,9 @@ kzpdr <- function(ds, angle, plot=F, pair=T, ...) {
    }
    rec_svg <- unique(rec_svg)
    rec_svg$direction <- rec_svg$ang*180/pi
-   return(list(MD5 = md5, rec = rec_svg))
+   return(list(MD5 = md5, rec = rec_svg, cut=cut0, dpct=dpct,
+	max = max(y$rpg, na.rm=TRUE), 
+	mean=mean(y$rpg, na.rm=TRUE), sd=sd(y$rpg, na.rm=TRUE)))
 }
 
 
