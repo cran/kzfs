@@ -4,7 +4,6 @@
 \name{kzpdr.QF}
 \alias{kzpdr.QF}
 \alias{kzpdr.demo}
-\alias{kzpdr.QF}
 \title{The Demo Dataset For Examples of \code{kzpdr} and \code{optDR}}
 \format{A list for a data frame and its MD5sum value.
 The data frame \code{rec} has 18 rows and a few variables:

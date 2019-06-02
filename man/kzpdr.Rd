@@ -120,11 +120,5 @@ kzpdr.spikes(kzpdr.demo)
 \code{\link{kzp2}}, \code{\link{kzpdr.tol}}, \code{\link{kzpdr.eval}}
   			\code{\link{kzpdr.valid}}, \code{\link{kzpdr.spikes}}
 }
-\concept{
-Kolmogorov-Zurbenko periodogram
-
-directional periodogram
-
-average periodogram
-}
+\concept{directional periodogram}
 \keyword{directional-periodogram}

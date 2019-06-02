@@ -3,7 +3,6 @@
 \name{kzft}
 \alias{kzft}
 \alias{kz.ft}
-\alias{kzft}
 \alias{kz.ftc}
 \title{Kolmogorov-Zurbenko Fourier Transform Function}
 \usage{
@@ -142,7 +141,5 @@ mtext("Red: reconstruction, Grey: signal + noise", cex=0.75)
 \seealso{
 \code{\link[kzft]{kzft}}, \code{\link{kz.smpg}}, \code{\link{kzp2}}
 }
-\concept{
-Kolmogorov-Zurbenko Fourier Transform
-}
+\concept{Kolmogorov-Zurbenko Fourier Transform}
 \keyword{KZFT}

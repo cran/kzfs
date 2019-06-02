@@ -20,7 +20,7 @@ Defaults is searching for available records in the environment.}
 
 \item{...}{Other arguments. 
 \itemize{
- \item      D3    Logic. Deafult is FALSE. If TRUE, output 3D perspective plot; 
+ \item      D3    Logic. Default is FALSE. If TRUE, output 3D perspective plot; 
         otherwise, 2D plot on frequency-direction surface. 
  \item scale    A two element vector for grid on frequency-direction plant. 
         The first element is for frequency. The second is for degree
@@ -82,11 +82,5 @@ kzpdr.estimate(kzpdr.demo)
 \code{\link{kzpdr}}, \code{\link{kzpdr.valid}}, \code{\link{kzp2}}
   			\code{\link{kzpdr.tol}}, \code{\link{kzpdr.spikes}}
 }
-\concept{
-Kolmogorov-Zurbenko periodogram
-
-directional periodogram
-
-average periodogram
-}
+\concept{directional periodogram}
 \keyword{directional-periodogram}

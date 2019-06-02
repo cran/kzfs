@@ -107,8 +107,6 @@ box();title("Signal without noise")
 \seealso{
 \code{\link[kzft]{kzft}}, \code{\link{kz.smpg}}, \code{\link{kzp2}}
 }
-\concept{
-Kolmogorov-Zurbenko Fourier Transform
-}
+\concept{Kolmogorov-Zurbenko Fourier Transform}
 \keyword{KZFT}
 \keyword{reconstruction}

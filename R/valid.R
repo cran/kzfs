@@ -24,9 +24,7 @@
 #' 	related estimation would be reliable.
 #'
 #' @keywords 	directional-periodogram
-#' @concept 	Kolmogorov-Zurbenko periodogram
 #' @concept 	directional periodogram
-#' @concept 	average periodogram
 #' @export
 #' @seealso		\code{\link{kzpdr}}, \code{\link{kzpdr.eval}}, \code{\link{kzpdr.tol}}
 #'

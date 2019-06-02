@@ -69,7 +69,5 @@ op <- kz.smpg(y, dpct=0.0000, f=c(0.0339,0.0366), rg=c(0.025,0.05),
 \seealso{
 \code{\link[kzft]{kzp}}, \code{\link{kzp2}}, \code{\link{kz.ft}}
 }
-\concept{
-Kolmogorov-Zurbenko periodogram
-}
+\concept{Kolmogorov-Zurbenko periodogram}
 \keyword{KZ-periodogram}

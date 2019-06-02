@@ -4,7 +4,6 @@
 \name{kzp2.QF}
 \alias{kzp2.QF}
 \alias{kzp2.demo}
-\alias{kzp2.QF}
 \title{The Demo Dataset For Examples of \code{optD2R}}
 \format{An object of class \code{matrix} with 150 rows and 150 columns.}
 \usage{

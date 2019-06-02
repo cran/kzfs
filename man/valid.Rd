@@ -44,11 +44,5 @@ kzpdr.valid(kzpdr.demo, t.D = 2, t.F = 0.01, level = 1)
 \seealso{
 \code{\link{kzpdr}}, \code{\link{kzpdr.eval}}, \code{\link{kzpdr.tol}}
 }
-\concept{
-Kolmogorov-Zurbenko periodogram
-
-directional periodogram
-
-average periodogram
-}
+\concept{directional periodogram}
 \keyword{directional-periodogram}

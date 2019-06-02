@@ -39,7 +39,5 @@ image(x=x, y=y, z=z)
 \seealso{
 \code{\link[kza]{kz}}
 }
-\concept{
-Kolmogorov-Zurbenko filter
-}
+\concept{Kolmogorov-Zurbenko filter}
 \keyword{KZ-filter}

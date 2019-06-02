@@ -15,7 +15,7 @@
 #' @param	t.F	Tolerance of frequency. Default value is 0.01.
 #' @param 	...	Other arguments. 
 #' \itemize{
-#'  \item 	 D3	Logic. Deafult is FALSE. If TRUE, output 3D perspective plot; 
+#'  \item 	 D3	Logic. Default is FALSE. If TRUE, output 3D perspective plot; 
 #'			otherwise, 2D plot on frequency-direction surface. 
 #'  \item scale	A two element vector for grid on frequency-direction plant. 
 #'			The first element is for frequency. The second is for degree
@@ -55,9 +55,7 @@
 #'	suggested wave on direction-frequency parameter plane. 
 # 
 #' @keywords 	directional-periodogram
-#' @concept 	Kolmogorov-Zurbenko periodogram
 #' @concept 	directional periodogram
-#' @concept 	average periodogram
 #' @export
 #' @seealso		\code{\link{kzpdr}}, \code{\link{kzpdr.valid}}, \code{\link{kzp2}}
 #'   			\code{\link{kzpdr.tol}}, \code{\link{kzpdr.spikes}}

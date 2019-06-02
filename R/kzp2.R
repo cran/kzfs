@@ -45,9 +45,7 @@
 #'				\code{kzp2.summary} returns a data list for suggested wave 
 #'			parameters, including frequency and direction values.
 #'
-#' @keywords 	2D-periodogram 
-#' @concept 	Kolmogorov-Zurbenko periodogram
-#' @concept 	2-dimensional periodogram
+#' @keywords 	2D periodogram 
 #' @concept 	2D periodogram
 #' @export
 #' @seealso		\code{\link{kzpdr}}, \code{\link{kzpdr.eval}}, \code{\link{kzpdr.spikes}}

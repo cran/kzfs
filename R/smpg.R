@@ -45,7 +45,7 @@
 #' @useDynLib 	kzfs, .registration = TRUE
 #' @export		kz.smpg
 #' @keywords 	KZ-periodogram
-#' @concept     	Kolmogorov-Zurbenko periodogram
+#' @concept     Kolmogorov-Zurbenko periodogram
 #' @export
 #' @seealso		\code{\link[kzft]{kzp}}, \code{\link{kzp2}}, \code{\link{kz.ft}}
 #' @examples 

@@ -111,11 +111,6 @@ kzp2.summary(sp)		# direction & frequency
 \seealso{
 \code{\link{kzpdr}}, \code{\link{kzpdr.eval}}, \code{\link{kzpdr.spikes}}
 }
-\concept{
-Kolmogorov-Zurbenko periodogram
-
-2-dimensional periodogram
-
-2D periodogram
-}
-\keyword{2D-periodogram}
+\concept{2D periodogram}
+\keyword{2D}
+\keyword{periodogram}

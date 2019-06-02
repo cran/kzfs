@@ -73,9 +73,7 @@
 #'		perspective plot.
 #'
 #' @keywords 	directional-periodogram
-#' @concept 	Kolmogorov-Zurbenko periodogram
 #' @concept 	directional periodogram
-#' @concept 	average periodogram
 #' @export
 #' @seealso		\code{\link{kzp2}}, \code{\link{kzpdr.tol}}, \code{\link{kzpdr.eval}}
 #'   			\code{\link{kzpdr.valid}}, \code{\link{kzpdr.spikes}}
